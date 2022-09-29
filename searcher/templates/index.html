@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+    <ul class="goals">{% for student in students %}
+        <h2 class="name">الطالب: {{ student.full_name }}</h2>
+        {% for wish in student.goals %}
+        {% if wish.accepted %}
+        <li class="goal">
+            <div style="border-right-color: green;">
+                <div class="right">
+                    
+                    <h5>{{ wish.college }} | {{ wish.special }}</h5>
+                    <p><b style="color: green;">مقبول بترتيب {{ wish.accepted_seq }} من {{ wish.accepted_count }} طالب تم قبوله</b></p>
+                </div>
+                <h4>الدرجة:</h4>
+                <table>
+                    <tr>
+                        <th class="td">الثنوية العامة</th>
+                        <th class="td">اختبار المفاضلة</th>
+                        <th class="td">النهائية</th>
+                    </tr>
+                    <tbody>
+                        <tr>{% for mark in wish.marks %}
+                            <td class="td">{{ mark }}</td>
+                        {% endfor %}</tr>
+                    </tbody>
+                </table>
+                <p class="note">الترتيب بالنسبة للمتفاضلين {{ wish.seq }} من {{ wish.count_all }}</p>
+            </div>
+        </li>{% else %}
+        <li class="goal">
+            <div>
+                <div class="right">
+                    <h5>{{ wish.college }} | {{ wish.special }}</h5>
+                </div>
+                <div class="left">
+
+                </div>
+                <h3>الدرجة:</h3>
+                <table>
+                    <tr>
+                        <th class="td">الثنوية العامة</th>
+                        <th class="td">اختبار المفاضلة</th>
+                        <th class="td">النهائية</th>
+                    </tr>
+                    <tbody>
+                        <tr>{% for mark in wish.marks %}
+                            <td class="td">{{ mark }}</td>
+                        {% endfor %}</tr>
+                    </tbody>
+                </table>
+                <p class="note">الترتيب بالنسبة للمتفاضلين {{ wish.seq }} من {{ wish.count_all }}</p>
+            </div>
+        </li>{% endif %}{% endfor %}
+    {% empty %}
+    <h2 class="heading">الاحصائيات</h2>
+    <div class="content">
+        <h3>عدد الطلاب المسجلين: {{ registers }}</h3>
+        <h3>عدد الطلاب المقبولين: {{ accepteds }}</h3>
+        <div>{% for college in university %}
+            <h3>كلية {{ college.name }}</h3>
+            <table>
+                <tr class="tr4">
+                    <th class="td">التخصص</th>
+                    <th class="td">المسجلين</th>
+                    <th class="td">المتفاضلين</th>
+                    <th class="td">قبول عام</th>
+                </tr>{% for specialty in college.specialties %}
+                <tr class="tr4">{% for data in specialty %}
+                    <td class="td">{{ data }}</td>{% endfor %}
+                </tr>{% endfor %}
+            </table>
+        {% endfor %}</div>
+
+    </div>{% endfor %}</ul>
+</section>{% endblock %}

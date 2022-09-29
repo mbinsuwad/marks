@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Studants Marks</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <section class="Header">
+        <div>
+            <img src="{% static 'images/logo.png' %}" alt="logo" class="img">
+            <span class="hi">أهلاً وسهلاً بك</span>
+        </div>
+    </section>
+    <section class="body">
+        <div class="up">
+            <h1 class="heading">درجات اختبارات قبول<br>جامعة حضرموت</h1>
+            <p class="explane">ادخل اسم الطالب الذي تبحث عن معلومات حول قبوله في جامعة حضرموت هذه السنة:</p>
+            <p class="declare"></p>
+            <div id="u"></div>
+            <form action="{% url 'index' %}" class="form" method="post">
+                {% csrf_token %}
+                <input type="text" name="q" id="q" class="input" placeholder="الاسم">
+                <input type="hidden" value="1" name="page" id="page">
+                <button type="submit" class="s"></button><i><img src="{% static 'images/search.png' %}" alt="بحث"></i></button>
+                <div class="autocom">
+                </div>
+            </form>
+        </div>
+        {% block body %}{% endblock %}
+        
+</section>
+<section class="footer">
+    <ul class="pages">
+            {% for page in pages %}
+            <form action="{% url 'index' %}" method="post" class="c">
+                {% csrf_token %}
+                <input type="hidden" name="q" id="q" value="{{ entry_name }}">
+                <input type="hidden" name="page" value='{{ page }}'>
+                <button type="submit" class="page">{{ page }}</button>
+            </form>
+            {% endfor %}
+    </ul>
+    <span>عدد عمليات البحث: {{ posting_times }}</span>
+    <span>عدد الزوار: {{ visitors }}</span>
+    <p class="phone">711491797</p>
+    <p class="email">mbinsuwad@gmail.com</p>
+    <ul>
+        <li><a href="https://www.facebook.com/profile.php?id=100008231293734" target="blank"><img src="{% static 'images/facebook.png' %}" alt="facebook"></a></li>
+        <li><a href="https://instgram.com/mo.sa.bs?igshid=YmMyMTA2M2Y=" target="blank"><img src="{% static 'images/instgram.png' %}" alt="instgram"></a></li>
+        <li><a href="https://www.linkedin.com/in/mohamed-saleh-bin-suwad-06a530247" target="blank"><img src="{% static 'images/linkedin.png' %}" alt="linkedin"></a></li>
+        <li><a href="https://api.whatsapp.com/send?phone=967711491797&text=السلام%20عليكم%20ورحمة%20الله%20وبركاته" target="blank"><img src="{% static 'images/whatsapp.png' %}" alt="whatsapp"></a></li>
+        <li><a href="https://github.com/mbinsuwad" target="blank"><img src="{% static 'images/github.png' %}" alt="youtube"></a></li>
+    </ul>
+    <img src="{% static 'images/m.s.bs.png' %}" alt="Mohammed Bin Suwad">
+    <p>تم بناء وتصميم وبرمجة الموقع من قبل<br><img src="{% static 'images/logo.png' %}" alt="logo"></p>
+</section>
+
+</body>
+<script>
+    const form = document.querySelector(".form");
+    const input = form.querySelector(".input");
+    const suggBox = form.querySelector(".autocom");
+
+    input.onkeyup = (e)=> {
+        let userData = e.target.value;
+        let emptyArray = [];
+        if (userData == ''){suggBox.className = 'autocom';}
+        if (userData){
+            fetch(`/names?entry=${userData}`)
+            .then(response => {return response.json()})
+            .then(data => {
+            emptyArray=data.names;
+            emptyArray.forEach(name => {
+                let li = document.createElement('li');
+                li.innerHTML = name;
+                suggBox.append(li);
+            });
+            suggBox.querySelectorAll('li').forEach(li => {
+                li.onclick = () => {
+                    input.value = li.innerHTML;
+                }
+            });
+        })
+            suggBox.className = 'autocom active';
+        }
+    };
+</script>
+</html>
