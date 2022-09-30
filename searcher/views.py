@@ -49,7 +49,7 @@ def get_ids(entry_name):
 def get_student(id):
     conn = sqlite3.connect(DB)
     c = conn.cursor()
-    c.execute(f"SELECT * FROM {table_name} WHERE id = {id}")
+    c.execute(f"SELECT seq, id, name, male, scondary_shool, test, finall, specialty, college, accepted, accepted_seq FROM {table_name} WHERE id = {id}")
     data = c.fetchall()
     student = Student()
     student.full_name = data[0][2]
@@ -193,6 +193,7 @@ def index (request):
         postCounter()
         students = []
         chunksList = list(chunks(get_ids(entry_name)))
+        print(chunksList)
         for id in chunksList[int(page)-1]:
             students.append(get_student(id))
         c.close()
