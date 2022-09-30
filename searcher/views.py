@@ -5,7 +5,7 @@ import sqlite3
 # from try import chunk_students
 # Create your views here.
 
-DB = 'try.sqlite3'
+DB = '2022.sqlite3'
 table_name = "scraped"
 
 
@@ -147,13 +147,13 @@ class College():
         return f"{self.name} : {self.specialties}"
 
 def get_specialty(college):
-    c.execute(f"select specialty, register, tested, accepted from university where college = '{college}'")
+    c.execute(f"select specialty, register, tested, accepted from university1 where college = '{college}'")
     all = c.fetchall()
     return all
 
 def get_colleges():
     colleges = []
-    for coll in c.execute(f"select college from university").fetchall():
+    for coll in c.execute(f"select college from university1").fetchall():
         if coll[0] not in colleges:colleges.append(coll[0])
     return colleges
 
